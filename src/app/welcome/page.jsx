@@ -1,19 +1,27 @@
+"use client";
+
 import React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Link from "next/link";
 import Image from "next/image";
 import Container from "../components/Container";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
+
 function WelcomePage() {
+  const { data: session } = useSession();
+  if (!session) redirect("/login");
   return (
     <Container>
-      <Navbar />
+      <Navbar session={session} />
       <div className="flex-grow">
         <div className="container mx-auto shadow-xl my-10 p-10 rounded-xl">
           <div className="flex justify-between">
             <div>
               <h3 className="text-3xl">Profile</h3>
-              <p>Welcome, [name]</p>
+              <p>Welcome, {session?.user.name}</p>
+              <p>Email, {session?.user.email}</p>
             </div>
             <div>
               <Link

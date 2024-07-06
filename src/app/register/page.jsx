@@ -1,10 +1,12 @@
-"use client"
+"use client";
 
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Container from "../components/Container";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 function RegisterPage() {
   const [name, setName] = useState("");
@@ -13,6 +15,9 @@ function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  const { data: session } = useSession();
+  if (session) redirect("/welcome");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,42 +32,47 @@ function RegisterPage() {
       return;
     }
 
-    try {   
-      const resUserExists = await fetch("http://localhost:3000/api/userExists", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({email})
-      })
-      const {user} = await resUserExists.json();
+    try {
+      const resUserExists = await fetch(
+        "http://localhost:3000/api/userExists",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        }
+      );
+      const { user } = await resUserExists.json();
 
-      if(user){
+      if (user) {
         setError("User already exists.");
         return;
       }
       const res = await fetch("http://localhost:3000/api/register", {
         method: "POST",
-        headers:{
-          "Content-Type":"application/json"
+        headers: {
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name,email,password
-        })
-      })
+          name,
+          email,
+          password,
+        }),
+      });
 
       if (res.ok) {
         const form = e.target;
         setError("");
         form.reset();
-        setSuccess("success user register")
-      }else {
-        setError("User registeration fail.")
+        setSuccess("success user register");
+      } else {
+        setError("User registeration fail.");
       }
-    } catch(err) {
-      console.log("Error during registeration: ", err)
+    } catch (err) {
+      console.log("Error during registeration: ", err);
     }
-  }
+  };
 
   return (
     <Container>
@@ -87,25 +97,25 @@ function RegisterPage() {
                 type="text"
                 className="w-full bg-gray-200 border py-2 px-3 rounded text-lg my-2"
                 placeholder="Enter your name"
-                onChange={(e)=> setName(e.target.value)}
+                onChange={(e) => setName(e.target.value)}
               />
               <input
                 type="email"
                 className="w-full bg-gray-200 border py-2 px-3 rounded text-lg my-2"
                 placeholder="Enter your email"
-                onChange={(e)=> setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <input
                 type="password"
                 className="w-full bg-gray-200 border py-2 px-3 rounded text-lg my-2"
                 placeholder="Enter your password"
-                onChange={(e)=> setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <input
                 type="password"
                 className="w-full bg-gray-200 border py-2 px-3 rounded text-lg my-2"
                 placeholder="Confirm your password"
-                onChange={(e)=> setConfirmPassword(e.target.value)}
+                onChange={(e) => setConfirmPassword(e.target.value)}
               />
               <button
                 className="bg-green-500 text-white border py-2 px-3 rounded text-lg my-2"

@@ -1,9 +1,12 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import Logo from "../../../public/LogoHorizontal.png";
 import Image from "next/image";
+import { signOut } from "next-auth/react";
 
-function Navbar() {
+function Navbar({ session }) {
   return (
     <nav className="shadow-wl">
       <div className="container mx-auto">
@@ -14,12 +17,31 @@ function Navbar() {
             </Link>
           </div>
           <ul className="flex">
-            <li className="mx-3">
-              <Link href="/login">Login</Link>
-            </li>
-            <li className="mx-3">
-              <Link href="/register">Register</Link>
-            </li>
+            {!session ? (
+              <>
+                <li className="mx-3">
+                  <Link href="/login">Login</Link>
+                </li>
+                <li className="mx-3">
+                  <Link href="/register">Register</Link>
+                </li>
+              </>
+            ) : (
+              <li className="mx-3">
+                <Link
+                  href={"/welcome"}
+                  className="bg-gray-500 text-white border py-2 px-3 rouded-md text-lg my-2"
+                >
+                  Welcome
+                </Link>
+                <a
+                  onClick={() => signOut()}
+                  className="bg-red-500 text-white border py-2 px-3 rouded-md text-lg my-2"
+                >
+                  Log out
+                </a>
+              </li>
+            )}
           </ul>
         </div>
       </div>
