@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import Logo from "../../../public/next.svg";
+import Logo from "../../../public/LogoHorizontal.png";
 import Image from "next/image";
 
 function Navbar() {
@@ -10,7 +10,7 @@ function Navbar() {
         <div className="flex justify-between items-center p-4">
           <div>
             <Link href="/">
-              <Image src={Logo} width={100} height={100} alt={"Next js logo"} />
+              <Image src={Logo} width={100} height={200} alt={"Next js logo"} />
             </Link>
           </div>
           <ul className="flex">

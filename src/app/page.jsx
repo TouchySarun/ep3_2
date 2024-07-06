@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Container from "./components/Container";
 import Navbar from "./components/Navbar";
-import Vercel from "../../public/vercel.svg";
+import Vercel from "../../public/VerticalLogo.svg";
 import Footer from "./components/Footer";
 
 export default function Home() {
